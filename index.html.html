@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teste de Identidade em Cristo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F7F3EE;
+    --warm-white: #FDFAF7;
+    --ink: #1A1510;
+    --ink-soft: #3D352B;
+    --gold: #B08D57;
+    --gold-light: #D4B483;
+    --muted: #8C7B6B;
+    --border: #E2D9CF;
+    --surface: #FFFFFF;
+    --danger: #C0392B;
+    --success: #2E7D32;
+    --warn: #7D5A1E;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* Background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(176,141,87,.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 90%, rgba(176,141,87,.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 5rem;
+  }
+
+  /* Header */
+  .site-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .site-header .eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: block;
+  }
+  .site-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 6vw, 48px);
+    font-weight: 500;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  .site-header h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .site-header p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 460px;
+    margin: 0 auto;
+  }
+  .ornament {
+    display: block;
+    text-align: center;
+    color: var(--gold-light);
+    font-size: 18px;
+    margin: 12px 0;
+    letter-spacing: 8px;
+  }
+
+  /* Progress */
+  .progress-wrap { margin-bottom: 2rem; }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    letter-spacing: .02em;
+  }
+  .progress-track {
+    height: 2px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 99px;
+    transition: width .5s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* Axis badge */
+  .axis-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .axis-badge::before, .axis-badge::after {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 1px;
+    background: var(--gold-light);
+  }
+
+  /* Question card */
+  .q-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 2px 24px rgba(26,21,16,.04);
+    animation: fadeUp .3s ease;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .q-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 3.5vw, 22px);
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+  }
+
+  /* Options */
+  .opts { display: flex; flex-direction: column; gap: 10px; }
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all .2s;
+    background: var(--surface);
+    text-align: left;
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .opt:hover {
+    border-color: var(--gold-light);
+    background: #FFFDF9;
+    transform: translateX(2px);
+  }
+  .opt.sel {
+    border-color: var(--gold);
+    background: #FBF6EE;
+  }
+  .opt-letter {
+    min-width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: all .2s;
+  }
+  .opt.sel .opt-letter {
+    background: var(--gold);
+    color: #fff;
+    border-color: var(--gold);
+  }
+  .opt-text {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    padding-top: 2px;
+  }
+
+  /* Navigation */
+  .nav-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.5rem;
+  }
+  .btn {
+    flex: 1;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    letter-spacing: .04em;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all .2s;
+  }
+  .btn:hover { background: var(--surface); color: var(--ink); }
+  .btn-gold {
+    background: var(--gold);
+    color: #fff;
+    border-color: var(--gold);
+  }
+  .btn-gold:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .shake { animation: shake .35s ease; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+  /* Result */
+  .result-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .result-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(24px, 5vw, 36px);
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .result-header p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .verse-box {
+    background: var(--warm-white);
+    border-left: 3px solid var(--gold);
+    padding: 1.25rem 1.5rem;
+    border-radius: 0 12px 12px 0;
+    margin: 1.5rem 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-style: italic;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+  .verse-ref {
+    font-size: 12px;
+    font-style: normal;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--gold);
+    font-weight: 500;
+    letter-spacing: .08em;
+    margin-top: 8px;
+    display: block;
+  }
+
+  .overall-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 20px rgba(26,21,16,.04);
+  }
+  .score-ring {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .overall-info h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .overall-info p { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 2rem 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .axis-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 10px;
+  }
+  .axis-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .axis-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .axis-pct { font-size: 14px; font-weight: 500; }
+  .bar-bg { height: 4px; background: var(--border); border-radius: 99px; margin-bottom: 8px; }
+  .bar-fill { height: 4px; border-radius: 99px; transition: width 1.4s cubic-bezier(.4,0,.2,1); }
+  .axis-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  .insight-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 10px;
+  }
+  .ins-tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 99px;
+    display: inline-block;
+    margin-bottom: 10px;
+    letter-spacing: .06em;
+  }
+  .tag-strong { background: #EAF4EA; color: var(--success); }
+  .tag-grow   { background: #FDF4E3; color: var(--warn); }
+  .ins-text { font-size: 14px; color: var(--ink-soft); line-height: 1.7; }
+
+  .cta-row { display: flex; gap: 10px; margin-top: 2rem; flex-wrap: wrap; }
+  .cta-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--warm-white);
+    cursor: pointer;
+    color: var(--ink-soft);
+    transition: all .2s;
+    text-align: center;
+  }
+  .cta-btn:hover { border-color: var(--gold); color: var(--gold); background: #FBF6EE; }
+  .cta-btn.gold-btn { background: var(--gold); color: #fff; border-color: var(--gold); }
+  .cta-btn.gold-btn:hover { background: var(--ink); border-color: var(--ink); }
+
+  footer {
+    text-align: center;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 480px) {
+    .page { padding: 1.5rem 1rem 4rem; }
+    .q-card { padding: 1.25rem; }
+    .overall-card { flex-direction: column; text-align: center; }
+    .cta-row { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- TEST VIEW -->
+  <div id="test-view">
+    <header class="site-header">
+      <span class="eyebrow">Estudo de identidade bíblica</span>
+      <h1>Quem você é<br><em>em Cristo</em></h1>
+      <span class="ornament">✦ ✦ ✦</span>
+      <p>28 perguntas em 7 dimensões. Responda com honestidade — o objetivo é revelar onde sua identidade está realmente ancorada.</p>
+    </header>
+
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span id="plabel">Pergunta 1 de 28</span>
+        <span id="paxis"></span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="pbar" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div id="q-area"></div>
+
+    <div class="nav-row">
+      <button class="btn" id="btn-back" onclick="goBack()" style="display:none">← Anterior</button>
+      <button class="btn btn-gold" id="btn-next" onclick="goNext()">Próxima →</button>
+    </div>
+  </div>
+
+  <!-- RESULT VIEW -->
+  <div id="result-view" style="display:none">
+    <div class="result-header">
+      <span class="eyebrow">Seu resultado</span>
+      <h2 id="res-title"></h2>
+      <span class="ornament">✦ ✦ ✦</span>
+      <p id="res-sub"></p>
+    </div>
+
+    <div class="verse-box" id="res-verse"></div>
+    <div class="overall-card" id="overall-card"></div>
+
+    <div class="section-label">Seus 7 eixos de identidade</div>
+    <div id="axes-area"></div>
+
+    <div class="section-label">Destaques da análise</div>
+    <div id="insights-area"></div>
+
+    <div class="cta-row">
+      <button class="cta-btn gold-btn" onclick="window.print()">Imprimir resultado</button>
+      <button class="cta-btn" onclick="restart()">Refazer o teste</button>
+    </div>
+  </div>
+
+  <footer>
+    Teste de Identidade em Cristo &nbsp;·&nbsp; Baseado em princípios bíblicos<br>
+    "E não vos conformeis com este século, mas transformai-vos pela renovação do vosso entendimento." — Rm 12:2
+  </footer>
+</div>
+
+<script>
+const AXES = [
+  {id:'fonte', name:'Fonte da identidade',        color:'#B08D57'},
+  {id:'segur', name:'Segurança espiritual',        color:'#3B7D6E'},
+  {id:'auto',  name:'Autoimagem bíblica',           color:'#6B5FA3'},
+  {id:'aprov', name:'Aprovação e pertencimento',   color:'#A04030'},
+  {id:'passd', name:'Reconciliação com o passado', color:'#8B6914'},
+  {id:'prop',  name:'Propósito e chamado',          color:'#9E4060'},
+  {id:'renov', name:'Renovação da mente',           color:'#3B6D35'},
+];
+
+const QS = [
+  {a:'fonte',q:'Quando alguém me critica duramente, minha primeira reação interna é...',opts:[
+    {t:'Questionar quem eu sou como pessoa',v:1},
+    {t:'Ficar magoado, mas logo me lembro de quem Deus diz que sou',v:3},
+    {t:'Avaliar se a crítica tem fundamento, sem ameaça à minha identidade',v:4},
+    {t:'Sentir raiva — minha identidade depende de ser visto como competente',v:2},
+  ]},
+  {a:'fonte',q:'Minha sensação de valor pessoal está principalmente ligada a...',opts:[
+    {t:'Minhas conquistas, produtividade ou posição',v:1},
+    {t:'Como as pessoas me veem e o que pensam de mim',v:2},
+    {t:'Quem Deus diz que sou nas Escrituras',v:4},
+    {t:'Meus relacionamentos e quanto sou querido',v:2},
+  ]},
+  {a:'fonte',q:'Quando falho em algo importante, o que acontece com minha autoimagem?',opts:[
+    {t:'Fica fortemente abalada — associo falha com quem eu sou',v:1},
+    {t:'Sinto culpa, mas sei que isso não me define em Cristo',v:4},
+    {t:'Depende da área — em algumas fico devastado, em outras não',v:2},
+    {t:'Consigo separar o erro do meu valor como pessoa',v:3},
+  ]},
+  {a:'fonte',q:'Em que você geralmente pensa primeiro ao se apresentar a alguém?',opts:[
+    {t:'No que faço — minha profissão, papel ou função',v:1},
+    {t:'Em como posso causar boa impressão',v:2},
+    {t:'Simplesmente em quem sou como pessoa',v:3},
+    {t:'Em que sou filho(a) de Deus antes de qualquer outro título',v:4},
+  ]},
+  {a:'segur',q:'Você consegue se sentir seguro(a) espiritualmente mesmo quando não está "se saindo bem" como cristão?',opts:[
+    {t:'Raramente — minha segurança depende do meu desempenho espiritual',v:1},
+    {t:'Às vezes, mas a culpa me faz duvidar',v:2},
+    {t:'Geralmente sim — entendo que minha posição em Cristo não oscila',v:4},
+    {t:'É difícil — tenho muito medo de decepcionar a Deus',v:1},
+  ]},
+  {a:'segur',q:'Quando leio textos bíblicos sobre julgamento e responsabilidade, o que predomina?',opts:[
+    {t:'Ansiedade — tenho medo de não ser suficiente',v:1},
+    {t:'Gratidão — lembro que Cristo é minha justiça',v:4},
+    {t:'Indiferença — não penso muito sobre isso',v:2},
+    {t:'Motivação — quero viver à altura do que recebi',v:3},
+  ]},
+  {a:'segur',q:'O amor de Deus por você parece condicional à sua obediência?',opts:[
+    {t:'Frequentemente sim, apesar de saber teologicamente que não deveria',v:1},
+    {t:'Não — entendo e vivo na certeza do amor incondicional',v:4},
+    {t:'Às vezes oscilo entre os dois',v:2},
+    {t:'Não penso sobre isso com frequência',v:2},
+  ]},
+  {a:'segur',q:'Quando comete um pecado grave, sua primeira reação é...',opts:[
+    {t:'Afastar-se de Deus por vergonha',v:1},
+    {t:'Correr para Deus em confissão e receber perdão',v:4},
+    {t:'Tentar compensar com boas obras',v:2},
+    {t:'Ignorar e seguir em frente',v:1},
+  ]},
+  {a:'auto',q:'Você consegue receber um elogio sincero sem minimizá-lo ou sentir que não merece?',opts:[
+    {t:'Dificilmente — sempre acho que exageraram ou que vão me descobrir',v:1},
+    {t:'Às vezes — depende do dia e de como estou me sentindo',v:2},
+    {t:'Geralmente sim, com gratidão',v:3},
+    {t:'Sim — recebo como graça, sabendo que todo bem em mim vem de Deus',v:4},
+  ]},
+  {a:'auto',q:'Como você se descreveria mais honestamente?',opts:[
+    {t:'Cheio(a) de falhas que superam meus pontos fortes',v:1},
+    {t:'Uma mistura de luz e sombra, em processo de transformação',v:4},
+    {t:'Razoável — nem muito bom nem muito ruim',v:3},
+    {t:'Alguém que não sabe muito bem quem é',v:2},
+  ]},
+  {a:'auto',q:'Você acredita genuinamente que Deus gosta de você — não apenas te ama por obrigação?',opts:[
+    {t:'Acredito que me ama, mas "gostar" parece difícil de imaginar',v:2},
+    {t:'Sim — e isso me enche de gratidão',v:4},
+    {t:'Às vezes sinto isso, outras vezes parece distante',v:2},
+    {t:'Não — acho que Deus está geralmente decepcionado comigo',v:1},
+  ]},
+  {a:'auto',q:'Quando você se olha internamente, o que predomina?',opts:[
+    {t:'Julgamento e lista de defeitos',v:1},
+    {t:'Curiosidade e compaixão — me vejo como Deus me vê',v:4},
+    {t:'Indiferença — evito esse tipo de reflexão',v:2},
+    {t:'Uma mistura de autoaceitação e áreas de crescimento',v:3},
+  ]},
+  {a:'aprov',q:'Com que frequência você toma decisões para evitar decepcionar outras pessoas?',opts:[
+    {t:'Com muita frequência — o medo da desaprovação guia muitas escolhas',v:1},
+    {t:'Às vezes, especialmente com pessoas importantes para mim',v:2},
+    {t:'Raramente — busco agradar a Deus primeiro',v:4},
+    {t:'Equilibro minha convicção com consideração pelos outros',v:3},
+  ]},
+  {a:'aprov',q:'Quando discorda de algo no grupo ou na comunidade cristã, você...',opts:[
+    {t:'Fica calado para manter a harmonia e não ser rejeitado',v:1},
+    {t:'Fala com dificuldade — a aprovação do grupo importa muito',v:2},
+    {t:'Expressa sua perspectiva com humildade e firmeza',v:4},
+    {t:'Evita o conflito mas carrega o peso internamente',v:2},
+  ]},
+  {a:'aprov',q:'Você consegue servir anonimamente sem sentir que precisa ser reconhecido?',opts:[
+    {t:'Dificilmente — o reconhecimento importa mais do que admito',v:1},
+    {t:'Às vezes sim, mas fico feliz quando percebem',v:2},
+    {t:'Sim — faço pela audiência de Um',v:4},
+    {t:'Geralmente sim, mas é uma luta constante',v:3},
+  ]},
+  {a:'aprov',q:'Sua sensação de pertencimento na comunidade cristã vem de...',opts:[
+    {t:'Ser aceito e aprovado pelos outros membros',v:1},
+    {t:'Saber que sou membro do corpo de Cristo independente das pessoas',v:4},
+    {t:'Participar ativamente e contribuir',v:3},
+    {t:'Uma combinação de relacionamentos e fé',v:2},
+  ]},
+  {a:'passd',q:'Coisas que você fez no passado ainda definem como você se sente sobre quem você é?',opts:[
+    {t:'Sim — carrego erros antigos como parte da minha identidade',v:1},
+    {t:'Às vezes afloram, mas sei que sou nova criatura em Cristo',v:3},
+    {t:'Não — o perdão de Deus transformou minha autoimagem',v:4},
+    {t:'Depende da gravidade — alguns consigo perdoar, outros não',v:2},
+  ]},
+  {a:'passd',q:'Você consegue receber o perdão de Deus pelas coisas que fez de errado?',opts:[
+    {t:'Com dificuldade — ainda me puno por coisas já confessadas',v:1},
+    {t:'Intelectualmente sim, mas emocionalmente demoro para sentir',v:2},
+    {t:'Sim — confio que 1 João 1:9 é real e suficiente',v:4},
+    {t:'Há coisas que parecem imperdoáveis mesmo para Deus',v:1},
+  ]},
+  {a:'passd',q:'Traumas ou feridas do passado ainda moldam sua visão de Deus?',opts:[
+    {t:'Sim — projeto nas relações com Deus o que vivi com pessoas',v:2},
+    {t:'Fui sanado(a) — consigo separar as feridas de quem Deus é',v:4},
+    {t:'Tenho consciência disso e estou em processo de cura',v:3},
+    {t:'Não consigo sequer separar as duas coisas',v:1},
+  ]},
+  {a:'passd',q:'Você se vê como alguém com futuro ou como prisioneiro(a) do que foi?',opts:[
+    {t:'Mais prisioneiro — o passado tem muito peso',v:1},
+    {t:'Sei que tenho futuro, mas o passado ainda puxa',v:2},
+    {t:'Acredito no futuro que Deus preparou — Jeremias 29:11 é real',v:4},
+    {t:'Estou em transição — aprendendo a soltar o que foi',v:3},
+  ]},
+  {a:'prop',q:'Você sente que tem um chamado claro ou propósito específico dado por Deus?',opts:[
+    {t:'Não — sinto que sou uma peça sem encaixe',v:1},
+    {t:'Tenho uma ideia vaga, mas muita incerteza',v:2},
+    {t:'Sim — e estou caminhando nele com confiança',v:4},
+    {t:'Estou no processo de descoberta e é emocionante',v:3},
+  ]},
+  {a:'prop',q:'Quando pensa na sua vida daqui a 10 anos, o que predomina?',opts:[
+    {t:'Ansiedade — não sei o que Deus quer para mim',v:1},
+    {t:'Esperança — sei que Deus tem planos',v:4},
+    {t:'Ambição própria — quero realizar coisas por conta própria',v:2},
+    {t:'Abertura — confio no processo sem precisar controlar tudo',v:3},
+  ]},
+  {a:'prop',q:'Seus dons e habilidades naturais, você os vê como...',opts:[
+    {t:'Acidentes — tive sorte de ter esses talentos',v:1},
+    {t:'Dádivas de Deus com propósito no Seu reino',v:4},
+    {t:'Ferramentas para meu próprio sucesso',v:2},
+    {t:'Algo que ainda estou descobrindo e desenvolvendo',v:3},
+  ]},
+  {a:'prop',q:'Você encontra sentido mesmo nas temporadas difíceis da vida?',opts:[
+    {t:'Dificilmente — sofrimento parece apenas destruição',v:1},
+    {t:'Às vezes — consigo ver Deus agindo mesmo na dor',v:3},
+    {t:'Sim — Romanos 8:28 é minha âncora',v:4},
+    {t:'Ainda estou aprendendo a confiar nesse processo',v:2},
+  ]},
+  {a:'renov',q:'Com que frequência você deliberadamente medita em textos bíblicos sobre sua identidade em Cristo?',opts:[
+    {t:'Raramente ou nunca',v:1},
+    {t:'Às vezes, quando me lembro ou estou em crise',v:2},
+    {t:'Regularmente — faz parte da minha rotina',v:3},
+    {t:'Diariamente — é a forma como renovo minha mente',v:4},
+  ]},
+  {a:'renov',q:'Quando pensamentos negativos sobre si mesmo surgem, o que você faz?',opts:[
+    {t:'Deixo-os dominar e acredito neles',v:1},
+    {t:'Tento ignorar ou me distrair',v:2},
+    {t:'Os confronto com o que Deus diz nas Escrituras',v:4},
+    {t:'Percebo que são mentiras, mas tenho dificuldade de substituí-los',v:2},
+  ]},
+  {a:'renov',q:'Você tem consciência de quais crenças centrais guiam sua vida?',opts:[
+    {t:'Nunca parei para pensar nisso de forma estruturada',v:1},
+    {t:'Tenho algumas ideias, mas não consigo articular claramente',v:2},
+    {t:'Sim — já trabalhei minhas crenças nucleares à luz da Palavra',v:4},
+    {t:'Estou em processo de descoberta e revisão',v:3},
+  ]},
+  {a:'renov',q:'Romanos 12:2 fala em "transformar-se pela renovação do entendimento". Quanto isso descreve sua vida?',opts:[
+    {t:'Pouco — ainda me conformo muito com padrões do mundo',v:1},
+    {t:'Às vezes — tenho momentos de transformação genuína',v:2},
+    {t:'É uma prioridade real na minha caminhada',v:4},
+    {t:'Estou aprendendo a fazer isso de forma mais intencional',v:3},
+  ]},
+];
+
+const LETTERS = ['A','B','C','D'];
+const AXIS_LABELS = {fonte:'Fonte da identidade',segur:'Segurança espiritual',auto:'Autoimagem bíblica',aprov:'Aprovação e pertencimento',passd:'Reconciliação com o passado',prop:'Propósito e chamado',renov:'Renovação da mente'};
+
+let cur = 0, ans = {};
+
+function render() {
+  const q = QS[cur];
+  document.getElementById('pbar').style.width = Math.round(cur/QS.length*100)+'%';
+  document.getElementById('plabel').textContent = 'Pergunta '+(cur+1)+' de '+QS.length;
+  document.getElementById('paxis').textContent = AXIS_LABELS[q.a];
+  document.getElementById('btn-back').style.display = cur>0?'block':'none';
+  document.getElementById('btn-next').textContent = cur<QS.length-1 ? 'Próxima →' : 'Ver meu resultado →';
+
+  let h = '<div class="q-card">';
+  h += '<div class="axis-badge">'+AXIS_LABELS[q.a]+'</div>';
+  h += '<div class="q-text">'+q.q+'</div>';
+  h += '<div class="opts">';
+  q.opts.forEach((o,i) => {
+    h += '<button class="opt'+(ans[cur]===i?' sel':'')+'" onclick="pick('+i+')">';
+    h += '<div class="opt-letter">'+LETTERS[i]+'</div>';
+    h += '<div class="opt-text">'+o.t+'</div></button>';
+  });
+  h += '</div></div>';
+  document.getElementById('q-area').innerHTML = h;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function pick(i) { ans[cur]=i; render(); }
+
+function goNext() {
+  if (ans[cur]===undefined) {
+    const c=document.getElementById('q-area');
+    c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); return;
+  }
+  if (cur<QS.length-1){cur++;render();}else showResult();
+}
+
+function goBack(){if(cur>0){cur--;render();}}
+
+function showResult(){
+  document.getElementById('test-view').style.display='none';
+  document.getElementById('result-view').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  const sc={};
+  AXES.forEach(a=>sc[a.id]={t:0,n:0});
+  QS.forEach((q,i)=>{if(ans[i]!==undefined){sc[q.a].t+=q.opts[ans[i]].v;sc[q.a].n++;}});
+  const pct={};
+  AXES.forEach(a=>{pct[a.id]=sc[a.id].n?Math.round(((sc[a.id].t/sc[a.id].n)-1)/3*100):0;});
+  const overall=Math.round(AXES.reduce((s,a)=>s+pct[a.id],0)/AXES.length);
+
+  const lv = overall>=70
+    ? {title:'Identidade fortemente ancorada em Cristo',
+       sub:'Sua identidade está predominantemente enraizada em quem Deus diz que você é. Você demonstra maturidade espiritual consistente — veja os eixos mais baixos como convites de crescimento.',
+       verse:'Porque estou convicto de que nem morte, nem vida... poderá separar-nos do amor de Deus que está em Cristo Jesus.',
+       ref:'Romanos 8:38-39',
+       rc:'#2E7D32', rb:'#EAF4EA'}
+    : overall>=40
+    ? {title:'Identidade em processo de transformação',
+       sub:'Você tem bases sólidas em Cristo, mas ainda há eixos onde a identidade oscila conforme as circunstâncias. A chave é intencionalidade na renovação da mente.',
+       verse:'E não vos conformeis com este século, mas transformai-vos pela renovação do vosso entendimento.',
+       ref:'Romanos 12:2',
+       rc:'#7D5A1E', rb:'#FDF4E3'}
+    : {title:'Identidade buscando sua âncora',
+       sub:'Sua identidade ainda é moldada por fontes externas — aprovação, desempenho, passado ou medo. A boa notícia: Deus te convida exatamente de onde você está.',
+       verse:'Mas Deus prova o seu amor para conosco em que Cristo morreu por nós, sendo nós ainda pecadores.',
+       ref:'Romanos 5:8',
+       rc:'#C0392B', rb:'#FDECEC'};
+
+  document.getElementById('res-title').textContent=lv.title;
+  document.getElementById('res-sub').textContent=lv.sub;
+  document.getElementById('res-verse').innerHTML=lv.verse+'<span class="verse-ref">— '+lv.ref+'</span>';
+  document.getElementById('overall-card').innerHTML=
+    '<div class="score-ring" style="background:'+lv.rb+';color:'+lv.rc+'">'+overall+'%</div>'+
+    '<div class="overall-info"><h3>Ancoragem geral em Cristo</h3><p>Baseado nas suas 28 respostas em 7 dimensões de identidade bíblica.</p></div>';
+
+  const descs={
+    fonte:{h:'Sua identidade está enraizada em Cristo, não em desempenho ou aprovação humana.',m:'Você sabe a verdade, mas há momentos em que fontes externas influenciam seu senso de valor.',l:'Sua identidade está sendo definida por conquistas, aprovação ou papel social.'},
+    segur:{h:'Você vive com segurança espiritual que não oscila com seu desempenho.',m:'Oscila entre certeza e dúvida — geralmente quando sente que decepcionou a Deus.',l:'Sua segurança espiritual está muito ligada a como você está "se saindo" como cristão(ã).'},
+    auto: {h:'Você se vê como Deus te vê — com compaixão, valor e propósito.',m:'Tem momentos de clareza bíblica, mas o autocrítico interno ainda é forte.',l:'Sua autoimagem é predominantemente negativa ou instável. Há feridas que precisam de cura.'},
+    aprov:{h:'Você vive para uma audiência de Um. A desaprovação humana não te define.',m:'A aprovação humana ainda pesa — há medo de decepcionar ou ser rejeitado.',l:'Seu comportamento é fortemente guiado pelo que outros pensam.'},
+    passd:{h:'O passado foi reconciliado. Você é nova criatura e vive disso.',m:'O perdão foi recebido intelectualmente, mas emocionalmente ainda há peso.',l:'O passado ainda define quem você acredita que é. Há necessidade profunda de cura.'},
+    prop: {h:'Você vive com senso claro de chamado e propósito dado por Deus.',m:'Sabe que tem propósito, mas ainda há insegurança ou indefinição.',l:'A falta de propósito cria instabilidade de identidade.'},
+    renov:{h:'A renovação da mente é intencional e consistente na sua vida.',m:'Tem consciência da necessidade, mas a prática ainda é irregular.',l:'A mente ainda é moldada muito mais pelo mundo do que pela Palavra.'},
+  };
+
+  let axH='';
+  AXES.forEach(a=>{
+    const p=pct[a.id];
+    const d=p>=70?descs[a.id].h:p>=40?descs[a.id].m:descs[a.id].l;
+    axH+='<div class="axis-card">';
+    axH+='<div class="axis-head"><span class="axis-name">'+a.name+'</span><span class="axis-pct" style="color:'+a.color+'">'+p+'%</span></div>';
+    axH+='<div class="bar-bg"><div class="bar-fill" style="width:0%;background:'+a.color+'" data-w="'+p+'"></div></div>';
+    axH+='<div class="axis-desc">'+d+'</div></div>';
+  });
+  document.getElementById('axes-area').innerHTML=axH;
+  setTimeout(()=>document.querySelectorAll('.bar-fill').forEach(el=>el.style.width=el.dataset.w+'%'),150);
+
+  const sorted=AXES.slice().sort((a,b)=>pct[a.id]-pct[b.id]);
+  const low=sorted[0], high=sorted[sorted.length-1];
+  const tips={
+    fonte:'Efésios 1 descreve 12 realidades sobre quem você é — todas no passado, todas por graça. Meditar nessas verdades vai mover o centro de gravidade da sua identidade para longe do desempenho.',
+    segur:'Hebreus 4:16 te convida a chegar "com confiança ao trono da graça". Essa confiança não se baseia no seu estado espiritual, mas no de Cristo.',
+    auto:'Você foi "admiravelmente formado" (Sl 139:14). Uma autoimagem bíblica saudável é concordar com Deus sobre quem Ele fez — e o que Deus faz é bom.',
+    aprov:'João 5:44 pergunta: "Como podeis crer vós que recebeis glória uns dos outros?" Viver para aprovação humana e viver pela fé são impulsos opostos.',
+    passd:'2 Coríntios 5:17 não diz que você melhorou — diz que é uma nova criação. Elas descrevem o que foi, não quem você é.',
+    prop:'Efésios 2:10 — você é "obra de Deus, criado em Cristo Jesus para boas obras, as quais Deus preparou de antemão". Há um roteiro escrito antes do mundo existir.',
+    renov:'A mente que não é deliberadamente renovada pela Palavra é renovada pela cultura. Filipenses 4:8 é uma lista de filtros — passe seus pensamentos por ali.',
+  };
+  document.getElementById('insights-area').innerHTML=
+    '<div class="insight-card"><span class="ins-tag tag-strong">Ponto forte — '+high.name+'</span><div class="ins-text">'+tips[high.id]+' Continue cultivando isso.</div></div>'+
+    '<div class="insight-card"><span class="ins-tag tag-grow">Área de crescimento — '+low.name+'</span><div class="ins-text">'+tips[low.id]+'</div></div>';
+}
+
+function restart(){
+  cur=0;ans={};
+  document.getElementById('result-view').style.display='none';
+  document.getElementById('test-view').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
